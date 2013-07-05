@@ -2,7 +2,7 @@
 
 This library provides basic building blocks for building advanced console UIs.
 
-Initially created for [Gor](github.com/buger/gor).
+Initially created for [Gor](http://github.com/buger/gor).
 
 Full API documentation: http://godoc.org/github.com/buger/goterm
 
