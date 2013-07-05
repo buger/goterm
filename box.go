@@ -32,15 +32,17 @@ type Box struct {
 	// Example border:
 	//   "- │ ┌ ┐ └ ┘"
 	Border string
+
+	Flags int // Not used now
 }
 
 // Create new Box.
 // Width and height can be relative:
 //
 //    // Create box with 50% with of current screen and 10 lines height
-//    box := tm.NewBox(50|tm.PCT, 10)
+//    box := tm.NewBox(50|tm.PCT, 10, 0)
 //
-func NewBox(width, height int) *Box {
+func NewBox(width, height int, flags int) *Box {
 	width, height = GetXY(width, height)
 
 	box := new(Box)
@@ -50,6 +52,7 @@ func NewBox(width, height int) *Box {
 	box.Border = DEFAULT_BORDER
 	box.PaddingX = 1
 	box.PaddingY = 0
+	box.Flags = flags
 
 	return box
 }
