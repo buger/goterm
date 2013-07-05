@@ -1,4 +1,4 @@
-== Description
+## Description
 
 This library provides basic building blocks for building advanced console UIs.
 
@@ -6,7 +6,7 @@ Initially created for [Gor](github.com/buger/gor).
 
 Full API documentation: http://godoc.org/github.com/buger/goterm
 
-== Basic usage
+## Basic usage
 
 Full screen console app, priting current time:
 
@@ -37,7 +37,6 @@ Print red bold message on white background:
 
 ```go    
 tm.Println(tm.Backgound(tm.Color(tm.Bold("Important header"), tm.RED), tm.WHITE))
-tm.
 ```
 
 
