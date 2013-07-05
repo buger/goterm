@@ -47,6 +47,8 @@ Create box and move it to center of the screen:
 // Create Box with 30% width of current screen, and height of 20 lines
 box := tm.NewBox(30|tm.PCT, 20)
 
+// Add some content to the box
+// Note that you can add ANY content, even tables
 fmt.Fprint(box, "Some box content")
 
 // Move Box to approx center of the screen
