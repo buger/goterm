@@ -23,7 +23,7 @@ import (
 	"unsafe"
 )
 
-// Reset all custome styles
+// Reset all custom styles
 const RESET = "\033[0m"
 
 // Reset to default color
