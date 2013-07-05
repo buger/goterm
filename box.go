@@ -99,7 +99,7 @@ func (b *Box) String() (out string) {
 				line = ""
 			}
 
-			if len(line) >= contentWidth-1 {
+			if len(line) > contentWidth-1 {
 				// If line is too large limit it
 				line = line[0:contentWidth]
 			} else {

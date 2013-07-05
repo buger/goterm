@@ -8,12 +8,12 @@ import (
 func TestBox(t *testing.T) {
 	boxSample := `
 ┌--------┐
-│hello   │
-│world   │
-│test    │
+│ hello  │
+│ world  │
+│ test   │
 └--------┘`
 
-	box := NewBox(10, 5)
+	box := NewBox(10, 5, 0)
 	fmt.Fprint(box, "hello\nworld\ntest")
 
 	if box.String() != boxSample[1:] {

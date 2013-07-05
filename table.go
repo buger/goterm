@@ -11,6 +11,8 @@ import (
 // 		fmt.Fprintf(totals, "Time\tStarted\tActive\tFinished\n")
 //		fmt.Fprintf(totals, "%s\t%d\t%d\t%d\n", "All", started, started-finished, finished)
 //		tm.Println(totals)
+//
+//  Based on http://golang.org/pkg/text/tabwriter
 type Table struct {
 	tabwriter.Writer
 
