@@ -1,7 +1,17 @@
-// Inspired by
-// http://en.wikipedia.org/wiki/ANSI_escape_code#Colors
-// http://www.darkcoding.net/software/pretty-command-line-console-output-on-unix-in-python-and-go-lang/
-package terminal
+// Provides basic bulding blocks for advanced console UI
+//
+// Coordinate system:
+//
+//  1/1---X---->
+//   |
+//   Y
+//   |
+//   v
+//
+// Documentation for ANSI codes: http://en.wikipedia.org/wiki/ANSI_escape_code#Colors
+//
+// Inspired by: http://www.darkcoding.net/software/pretty-command-line-console-output-on-unix-in-python-and-go-lang/
+package goterm
 
 import (
 	"bytes"
@@ -13,9 +23,13 @@ import (
 	"unsafe"
 )
 
+// Reset all custome styles
 const RESET = "\033[0m"
+
+// Reset to default color
 const RESET_COLOR = "\033[32m"
 
+// List of possible colors
 const (
 	BLACK = iota
 	RED
@@ -27,8 +41,18 @@ const (
 	WHITE
 )
 
+func getColor(code int) string {
+	return fmt.Sprintf("\033[3%dm", code)
+}
+
+func getBgColor(code int) string {
+	return fmt.Sprintf("\033[4%dm", code)
+}
+
 // Set percent flag: num | PCT
+//
 // Check percent flag: num & PCT
+//
 // Reset percent flag: num & 0xFF
 const PCT = 0x80000000
 
@@ -37,14 +61,6 @@ type winsize struct {
 	Col    uint16
 	Xpixel uint16
 	Ypixel uint16
-}
-
-func getColor(code int) string {
-	return fmt.Sprintf("\033[3%dm", code)
-}
-
-func getBgColor(code int) string {
-	return fmt.Sprintf("\033[4%dm", code)
 }
 
 func getWinsize() (*winsize, error) {
@@ -71,8 +87,16 @@ func getWinsize() (*winsize, error) {
 	return ws, nil
 }
 
+// Global screen buffer
+// Its not recommented write to buffer dirrectly, use package Print,Printf,Println fucntions instead.
 var Screen *bytes.Buffer = new(bytes.Buffer)
 
+// Get relative or absolute coorditantes
+// To get relative, set PCT flag to number:
+//
+//      // Get 10% of total width to `x` and 20 to y
+//      x, y = tm.GetXY(10|tm.PCT, 20)
+//
 func GetXY(x int, y int) (int, int) {
 	if y == -1 {
 		y = CurrentHeight() + 1
@@ -91,6 +115,7 @@ func GetXY(x int, y int) (int, int) {
 
 type sf func(int, string) string
 
+// Apply given transformation func for each line in string
 func applyTransform(str string, transform sf) (out string) {
 	out = ""
 
@@ -101,14 +126,17 @@ func applyTransform(str string, transform sf) (out string) {
 	return
 }
 
+// Clear screen
 func Clear() {
 	fmt.Print("\033[2J")
 }
 
+// Move cursor to given position
 func MoveCursor(x int, y int) {
-	Printf("\033[%d;%dH", x, y)
+	fmt.Fprintf(Screen, "\033[%d;%dH", x, y)
 }
 
+// Move string to possition
 func MoveTo(str string, x int, y int) (out string) {
 	x, y = GetXY(x, y)
 
@@ -117,38 +145,51 @@ func MoveTo(str string, x int, y int) (out string) {
 	})
 }
 
+// Make bold
 func Bold(str string) string {
 	return applyTransform(str, func(idx int, line string) string {
 		return fmt.Sprintf("\033[1m%s\033[0m", line)
 	})
 }
 
+// Apply given color to string:
+//
+//     tm.Color("RED STRING", tm.RED)
+//
 func Color(str string, color int) string {
 	return applyTransform(str, func(idx int, line string) string {
 		return fmt.Sprintf("%s%s%s", getColor(color), line, RESET)
 	})
 }
 
+// Change background color of string:
+//
+//     tm.Background("string", tm.RED)
+//
 func Background(str string, color int) string {
 	return applyTransform(str, func(idx int, line string) string {
 		return fmt.Sprintf("%s%s%s", getBgColor(color), line, RESET)
 	})
 }
 
+// Get console width
 func Width() int {
 	ws, _ := getWinsize()
 	return int(ws.Col)
 }
 
+// Get console height
 func Height() int {
 	ws, _ := getWinsize()
 	return int(ws.Row)
 }
 
+// Get current height. Line count in Screen buffer.
 func CurrentHeight() int {
 	return strings.Count(Screen.String(), "\n")
 }
 
+// Flush buffer and ensure that it will not overflow screen
 func Flush() {
 	for idx, str := range strings.Split(Screen.String(), "\n") {
 		if idx > Height() {

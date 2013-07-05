@@ -1,17 +1,23 @@
-package terminal
+package goterm
 
 import (
 	"bytes"
 	"text/tabwriter"
 )
 
+// Tabwriter with own buffer:
+//
+//     	totals := tm.NewTable(0, 10, 5, ' ', 0)
+// 		fmt.Fprintf(totals, "Time\tStarted\tActive\tFinished\n")
+//		fmt.Fprintf(totals, "%s\t%d\t%d\t%d\n", "All", started, started-finished, finished)
+//		tm.Println(totals)
 type Table struct {
 	tabwriter.Writer
 
 	Buf *bytes.Buffer
 }
 
-// Check http://golang.org/pkg/text/tabwriter/#Writer.Init
+// Same as here http://golang.org/pkg/text/tabwriter/#Writer.Init
 func NewTable(minwidth, tabwidth, padding int, padchar byte, flags uint) *Table {
 	tbl := new(Table)
 	tbl.Buf = new(bytes.Buffer)
