@@ -82,13 +82,13 @@ Chart example:
     
     data := new(tm.DataTable)
     data.addColumn("Time")
-    data.addColumn("Lat")
-    data.addColumn("Count")
+    data.addColumn("Sin(x)")
+	data.addColumn("Cos(x+1)")
 
-    for i := 0; i < 60; i++ {
-        data.addRow(float64(i+60), float64(20+rand.Intn(10)), float64(i*2+rand.Intn(i+1)))
-    }
-
+    for i := 0.1; i < 10; i += 0.1 {
+		data.addRow(i, math.Sin(i), math.Cos(i+1))
+	}
+    
     tm.Println(chart.Draw(data))
 ```
 
