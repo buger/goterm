@@ -82,6 +82,7 @@ func getWinsize() (*winsize, error) {
 	)
 
 	if int(r1) == -1 {
+		fmt.Println("Error:", os.NewSyscallError("GetWinsize", errno))
 		return nil, os.NewSyscallError("GetWinsize", errno)
 	}
 	return ws, nil
@@ -174,13 +175,21 @@ func Background(str string, color int) string {
 
 // Get console width
 func Width() int {
-	ws, _ := getWinsize()
+	ws, err := getWinsize()
+
+	if err != nil {
+		return -1
+	}
+
 	return int(ws.Col)
 }
 
 // Get console height
 func Height() int {
-	ws, _ := getWinsize()
+	ws, err := getWinsize()
+	if err != nil {
+		return -1
+	}
 	return int(ws.Row)
 }
 
