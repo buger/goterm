@@ -107,12 +107,19 @@ func (c *LineChart) DrawAxes(maxX, minX, maxY, minY float64, index int) {
 	if c.Flags&DRAW_RELATIVE != 0 {
 		c.writeText(ff(minY), left, 1)
 	} else {
-		c.writeText("0", left, 1)
+		if minY > 0 {
+			c.writeText("0", left, 1)
+		} else {
+			c.writeText(ff(minY), left, 1)
+		}
 	}
 
 	c.writeText(ff(maxY), left, c.Height-1)
 
 	c.writeText(ff(minX), c.paddingX, 0)
+
+	x_col := c.data.columns[0]
+	c.writeText(c.data.columns[0], c.Width/2-len(x_col)/2, 1)
 
 	if c.Flags&DRAW_INDEPENDENT != 0 || len(c.data.columns) < 3 {
 		col := c.data.columns[index]
@@ -126,9 +133,6 @@ func (c *LineChart) DrawAxes(maxX, minX, maxY, minY float64, index int) {
 				c.writeText(char, c.Width-c.paddingX, start_from)
 			}
 		}
-
-		x_col := c.data.columns[0]
-		c.writeText(c.data.columns[0], c.Width/2-len(x_col)/2, 1)
 	}
 
 	if c.Flags&DRAW_INDEPENDENT != 0 {
@@ -146,7 +150,7 @@ func (c *LineChart) writeText(text string, x, y int) {
 	}
 }
 
-func (c *LineChart) Draw(data *DataTable, flags int) (out string) {
+func (c *LineChart) Draw(data *DataTable) (out string) {
 	var scaleY, scaleX float64
 
 	c.data = data
@@ -174,7 +178,7 @@ func (c *LineChart) Draw(data *DataTable, flags int) (out string) {
 
 	scaleX = float64(c.chartWidth) / (maxX - minX)
 
-	if c.Flags&DRAW_RELATIVE != 0 {
+	if c.Flags&DRAW_RELATIVE != 0 || minY < 0 {
 		scaleY = float64(c.chartHeight) / (maxY - minY)
 	} else {
 		scaleY = float64(c.chartHeight) / maxY
@@ -187,7 +191,7 @@ func (c *LineChart) Draw(data *DataTable, flags int) (out string) {
 			scaleX = float64(c.chartWidth-1) / (maxX - minX)
 			scaleY = float64(c.chartHeight) / maxY
 
-			if c.Flags&DRAW_RELATIVE != 0 {
+			if c.Flags&DRAW_RELATIVE != 0 || minY < 0 {
 				scaleY = float64(c.chartHeight) / (maxY - minY)
 			}
 		}
@@ -200,7 +204,7 @@ func (c *LineChart) Draw(data *DataTable, flags int) (out string) {
 			x := int((point[0]-minX)*scaleX) + c.paddingX
 			y := int((point[1])*scaleY) + c.paddingY
 
-			if c.Flags&DRAW_RELATIVE != 0 {
+			if c.Flags&DRAW_RELATIVE != 0 || minY < 0 {
 				y = int((point[1]-minY)*scaleY) + c.paddingY
 			}
 
@@ -231,7 +235,7 @@ func (c *LineChart) DrawLine(x0, y0, x1, y1 int, symbol string) {
 	drawLine(x0, y0, x1, y1, func(x, y int) {
 		coord := y*c.Width + x
 
-		if coord < len(c.Buf) {
+		if coord > 0 && coord < len(c.Buf) {
 			c.Buf[coord] = symbol
 		}
 	})
@@ -257,12 +261,22 @@ func getBoundaryValues(data *DataTable, index int) (maxX, minX, maxY, minY float
 		}
 	}
 
-	maxY = maxY * 1.1
-	minY = minY * 0.9
+	if maxY > 0 {
+		maxY = maxY * 1.1
+	} else {
+		maxY = maxY * 0.9
+	}
+
+	if minY > 0 {
+		minY = minY * 0.9
+	} else {
+		minY = minY * 1.1
+	}
 
 	return
 }
 
+// DataTable can contain data for multiple graphs, we need to extract only 1
 func getChartData(data *DataTable, index int) (out [][]float64) {
 	for _, r := range data.rows {
 		out = append(out, []float64{r[0], r[index]})

@@ -2,6 +2,7 @@ package goterm
 
 import (
 	"fmt"
+	"math"
 	"math/rand"
 	"testing"
 )
@@ -32,7 +33,9 @@ func TestCreateDataTable(t *testing.T) {
 	}
 }
 
-func TestLineChart(t *testing.T) {
+func TestLineChartIndependent(t *testing.T) {
+	fmt.Println("Independent charts\n")
+
 	chart := NewLineChart(100, 20)
 	chart.Flags = DRAW_INDEPENDENT //| DRAW_RELATIVE
 
@@ -47,5 +50,43 @@ func TestLineChart(t *testing.T) {
 		data.addRow(float64(i+60), float64(20+rand.Intn(10)), float64(i*2+rand.Intn(i+1))) // ,*/, x*x)
 	}
 
-	fmt.Println(chart.Draw(data, 0))
+	fmt.Println(chart.Draw(data))
+}
+
+func TestLineChartRelative(t *testing.T) {
+	fmt.Println("Relative chart\n")
+
+	chart := NewLineChart(100, 20)
+	chart.Flags = DRAW_RELATIVE
+
+	data := new(DataTable)
+	data.addColumn("X")
+	data.addColumn("Sin(x)")
+	data.addColumn("Cos(x+1)")
+
+	//data.addColumn("x*x")
+
+	for i := 0.1; i < 10; i += 0.1 {
+		data.addRow(i, math.Sin(i), math.Cos(i+1))
+	}
+
+	fmt.Println(chart.Draw(data))
+}
+
+func TestLineChart(t *testing.T) {
+	fmt.Println("Simple chart\n")
+
+	chart := NewLineChart(100, 20)
+	//chart.Flags = /*DRAW_INDEPENDENT // | */// DRAW_RELATIVE
+
+	data := new(DataTable)
+	data.addColumn("x")
+	data.addColumn("fx1")
+	data.addColumn("fx2")
+
+	for i := -5.0; i < 5; i += 0.1 {
+		data.addRow(i, 3*math.Sin(i)+3*i+30, i*i+5)
+	}
+
+	fmt.Println(chart.Draw(data))
 }

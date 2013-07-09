@@ -65,3 +65,42 @@ fmt.Fprintf(totals, "Time\tStarted\tActive\tFinished\n")
 fmt.Fprintf(totals, "%s\t%d\t%d\t%d\n", "All", started, started-finished, finished)
 tm.Println(totals)
 ```
+
+## Line charts
+
+Chart example:
+
+![screen shot 2013-07-09 at 5 05 37 pm](https://f.cloud.github.com/assets/14009/767676/e3dd35aa-e887-11e2-9cd2-f6451eb26adc.png)
+
+
+```go
+    import (
+        tm "github.com/buger/goterm"
+    )
+
+    chart := tm.NewLineChart(100, 20)
+    
+    data := new(tm.DataTable)
+    data.addColumn("Time")
+    data.addColumn("Lat")
+    data.addColumn("Count")
+
+    for i := 0; i < 60; i++ {
+        data.addRow(float64(i+60), float64(20+rand.Intn(10)), float64(i*2+rand.Intn(i+1)))
+    }
+
+    tm.Println(chart.Draw(data))
+```
+
+
+Drawing 2 separate graphs in different scales. Each graph have its own Y axe.
+
+```go
+chart.Flags = tm.DRAW_INDEPENDENT
+```
+
+Drawing graph with relative scale (Grapwh draw starting from min value instead of zero)
+
+```go
+chart.Flags = tm.DRAW_RELATIVE
+```
