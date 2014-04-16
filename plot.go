@@ -22,11 +22,11 @@ type DataTable struct {
 	rows [][]float64
 }
 
-func (d *DataTable) addColumn(name string) {
+func (d *DataTable) AddColumn(name string) {
 	d.columns = append(d.columns, name)
 }
 
-func (d *DataTable) addRow(elms ...float64) {
+func (d *DataTable) AddRow(elms ...float64) {
 	d.rows = append(d.rows, elms)
 }
 
