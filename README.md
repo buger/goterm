@@ -8,7 +8,7 @@ Full API documentation: http://godoc.org/github.com/buger/goterm
 
 ## Basic usage
 
-Full screen console app, priting current time:
+Full screen console app, printing current time:
 
 ```go
 import (
