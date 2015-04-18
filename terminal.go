@@ -14,8 +14,10 @@
 package goterm
 
 import (
+	"bufio"
 	"bytes"
 	"fmt"
+	"os"
 	"strings"
 )
 
@@ -36,6 +38,8 @@ const (
 	CYAN
 	WHITE
 )
+
+var Output *bufio.Writer = bufio.NewWriter(os.Stdout)
 
 func getColor(code int) string {
 	return fmt.Sprintf("\033[3%dm", code)
@@ -100,7 +104,7 @@ func applyTransform(str string, transform sf) (out string) {
 
 // Clear screen
 func Clear() {
-	fmt.Print("\033[2J")
+	Output.WriteString("\033[2J")
 }
 
 // Move cursor to given position
@@ -176,9 +180,10 @@ func Flush() {
 			return
 		}
 
-		fmt.Println(str)
+		Output.WriteString(str + "\n")
 	}
 
+	Output.Flush()
 	Screen.Reset()
 }
 
