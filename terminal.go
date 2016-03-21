@@ -217,3 +217,21 @@ func Println(a ...interface{}) {
 func Printf(format string, a ...interface{}) {
 	fmt.Fprintf(Screen, format, a...)
 }
+
+func Context(data string, idx, max int) string {
+	var start, end int
+
+	if len(data[:idx]) < (max / 2) {
+		start = 0
+	} else {
+		start = idx - max/2
+	}
+
+	if len(data)-idx < (max / 2) {
+		end = len(data) - 1
+	} else {
+		end = idx + max/2
+	}
+
+	return data[start:end]
+}
