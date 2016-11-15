@@ -19,6 +19,8 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"golang.org/x/crypto/ssh/terminal"
 )
 
 // Reset all custom styles
@@ -59,13 +61,6 @@ func getBgColor(code int) string {
 // Reset percent flag: num & 0xFF
 const shift = uint(^uint(0)>>63) << 4
 const PCT = 0x8000 << shift
-
-type winsize struct {
-	Row    uint16
-	Col    uint16
-	Xpixel uint16
-	Ypixel uint16
-}
 
 // Global screen buffer
 // Its not recommented write to buffer dirrectly, use package Print,Printf,Println fucntions instead.
@@ -170,22 +165,21 @@ func Background(str string, color int) string {
 
 // Get console width
 func Width() int {
-	ws, err := getWinsize()
-
+	width, _, err := terminal.GetSize(int(os.Stdout.Fd()))
 	if err != nil {
 		return -1
 	}
 
-	return int(ws.Col)
+	return width
 }
 
 // Get console height
 func Height() int {
-	ws, err := getWinsize()
+	_, height, err := terminal.GetSize(int(os.Stdout.Fd()))
 	if err != nil {
 		return -1
 	}
-	return int(ws.Row)
+	return height
 }
 
 // Get current height. Line count in Screen buffer.
