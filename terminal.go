@@ -116,6 +116,26 @@ func MoveCursor(x int, y int) {
 	fmt.Fprintf(Screen, "\033[%d;%dH", x, y)
 }
 
+// Move cursor up relative the current position
+func MoveCursorUp(bias int) {
+  fmt.Fprintf(Screen, "\033[%dA", bias);
+}
+
+// Move cursor down relative the current position
+func MoveCursorDown(bias int) {
+  fmt.Fprintf(Screen, "\033[%dB", bias);
+}
+
+// Move cursor forward relative the current position
+func MoveCursorForward(bias int) {
+  fmt.Fprintf(Screen, "\033[%dC", bias);
+}
+
+// Move cursor backward relative the current position
+func MoveCursorBackward(bias int) {
+  fmt.Fprintf(Screen, "\033[%dD", bias);
+}
+
 // Move string to possition
 func MoveTo(str string, x int, y int) (out string) {
 	x, y = GetXY(x, y)
