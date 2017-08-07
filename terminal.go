@@ -118,22 +118,22 @@ func MoveCursor(x int, y int) {
 
 // Move cursor up relative the current position
 func MoveCursorUp(bias int) {
-  fmt.Fprintf(Screen, "\033[%dA", bias);
+	fmt.Fprintf(Screen, "\033[%dA", bias)
 }
 
 // Move cursor down relative the current position
 func MoveCursorDown(bias int) {
-  fmt.Fprintf(Screen, "\033[%dB", bias);
+	fmt.Fprintf(Screen, "\033[%dB", bias)
 }
 
 // Move cursor forward relative the current position
 func MoveCursorForward(bias int) {
-  fmt.Fprintf(Screen, "\033[%dC", bias);
+	fmt.Fprintf(Screen, "\033[%dC", bias)
 }
 
 // Move cursor backward relative the current position
 func MoveCursorBackward(bias int) {
-  fmt.Fprintf(Screen, "\033[%dD", bias);
+	fmt.Fprintf(Screen, "\033[%dD", bias)
 }
 
 // Move string to possition
@@ -227,16 +227,16 @@ func Flush() {
 	Screen.Reset()
 }
 
-func Print(a ...interface{}) {
-	fmt.Fprint(Screen, a...)
+func Print(a ...interface{}) (n int, err error) {
+	return fmt.Fprint(Screen, a...)
 }
 
-func Println(a ...interface{}) {
-	fmt.Fprintln(Screen, a...)
+func Println(a ...interface{}) (n int, err error) {
+	return fmt.Fprintln(Screen, a...)
 }
 
-func Printf(format string, a ...interface{}) {
-	fmt.Fprintf(Screen, format, a...)
+func Printf(format string, a ...interface{}) (n int, err error) {
+	return fmt.Fprintf(Screen, format, a...)
 }
 
 func Context(data string, idx, max int) string {
