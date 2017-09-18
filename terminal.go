@@ -113,7 +113,7 @@ func Clear() {
 
 // Move cursor to given position
 func MoveCursor(x int, y int) {
-	fmt.Fprintf(Screen, "\033[%d;%dH", x, y)
+	fmt.Fprintf(Screen, "\033[%d;%dH", y, x)
 }
 
 // Move cursor up relative the current position
