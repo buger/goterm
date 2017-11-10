@@ -27,7 +27,7 @@ const RESET = "\033[0m"
 // Reset to default color
 const RESET_COLOR = "\033[32m"
 
-// Return curor to start of line and clean it
+// Return cursor to start of line and clean it
 const RESET_LINE = "\r\033[K"
 
 // List of possible colors
@@ -68,10 +68,10 @@ type winsize struct {
 }
 
 // Global screen buffer
-// Its not recommented write to buffer dirrectly, use package Print,Printf,Println fucntions instead.
+// Its not recommended write to buffer dirrectly, use package Print,Printf,Println fucntions instead.
 var Screen *bytes.Buffer = new(bytes.Buffer)
 
-// Get relative or absolute coorditantes
+// Get relative or absolute coordinates
 // To get relative, set PCT flag to number:
 //
 //      // Get 10% of total width to `x` and 20 to y
