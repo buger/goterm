@@ -19,7 +19,6 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"golang.org/x/sys/unix"
 )
 
 // Reset all custom styles
@@ -60,6 +59,13 @@ func getBgColor(code int) string {
 // Reset percent flag: num & 0xFF
 const shift = uint(^uint(0)>>63) << 4
 const PCT = 0x8000 << shift
+
+type winsize struct {
+	Row    uint16
+	Col    uint16
+	Xpixel uint16
+	Ypixel uint16
+}
 
 // Global screen buffer
 // Its not recommended write to buffer dirrectly, use package Print,Printf,Println fucntions instead.
@@ -182,30 +188,24 @@ func Background(str string, color int) string {
 	})
 }
 
-func getSize(fd int) (width, height int, err error) {
-	ws, err := unix.IoctlGetWinsize(fd, unix.TIOCGWINSZ)
-	if err != nil {
-		return -1, -1, err
-	}
-	return int(ws.Col), int(ws.Row), nil
-}
-
 // Get console width
 func Width() int {
-	width, _, err := getSize(int(os.Stdout.Fd()))
+	ws, err := getWinsize()
+
 	if err != nil {
 		return -1
 	}
-	return width
+
+	return int(ws.Col)
 }
 
 // Get console height
 func Height() int {
-	_, height, err := getSize(int(os.Stdout.Fd()))
+	ws, err := getWinsize()
 	if err != nil {
 		return -1
 	}
-	return height
+	return int(ws.Row)
 }
 
 // Get current height. Line count in Screen buffer.
