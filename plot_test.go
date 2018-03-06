@@ -38,19 +38,33 @@ func TestLineChartIndependent(t *testing.T) {
 
 	chart := NewLineChart(100, 20)
 	chart.Flags = DRAW_INDEPENDENT //| DRAW_RELATIVE
+	chartReversed := NewLineChart(100, 20)
+	chartReversed.Flags = DRAW_INDEPENDENT
 
 	data := new(DataTable)
 	data.AddColumn("Time")
 	data.AddColumn("Lat")
 	data.AddColumn("Count")
 
+	dataReversed := new(DataTable)
+	dataReversed.AddColumn("Time")
+	dataReversed.AddColumn("Lat")
+	dataReversed.AddColumn("Count")
+
 	//data.AddColumn("x*x")
 
 	for i := 0; i < 60; i++ {
-		data.AddRow(float64(i+60), float64(20+rand.Intn(10)), float64(i*2+rand.Intn(i+1))) // ,*/, x*x)
+		x := float64(i + 60)
+		y1 := float64(20 + rand.Intn(10))
+		y2 := float64((60-i)*2 + rand.Intn((60-i)+1))
+
+		data.AddRow(x, y1, y2) // ,*/, x*x)
+		dataReversed.AddRow(x, y2, y1)
 	}
 
+	// The two charts should look the same, only with inversed axes and colors
 	fmt.Println(chart.Draw(data))
+	fmt.Println(chartReversed.Draw(dataReversed))
 }
 
 func TestLineChartRelative(t *testing.T) {
