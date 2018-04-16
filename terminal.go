@@ -148,7 +148,7 @@ func MoveTo(str string, x int, y int) (out string) {
 // Return carrier to start of line
 func ResetLine(str string) (out string) {
 	return applyTransform(str, func(idx int, line string) string {
-		return fmt.Sprintf(RESET_LINE, line)
+		return fmt.Sprintf("%s%s", RESET_LINE, line)
 	})
 }
 
