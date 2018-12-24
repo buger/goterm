@@ -177,6 +177,12 @@ func Color(str string, color int) string {
 	})
 }
 
+func ColorRGB(str string, r uint8, g uint8, b uint8) string {
+	return applyTransform(str, func(idx int, line string) string {
+		return fmt.Sprintf("%s%s%s", getRGBColor(r, g, b), line, RESET)
+	})
+}
+
 func Highlight(str, substr string, color int) string {
 	hiSubstr := Color(substr, color)
 	return strings.Replace(str, substr, hiSubstr, -1)
@@ -193,6 +199,12 @@ func HighlightRegion(str string, from, to, color int) string {
 func Background(str string, color int) string {
 	return applyTransform(str, func(idx int, line string) string {
 		return fmt.Sprintf("%s%s%s", getBgColor(color), line, RESET)
+	})
+}
+
+func BackgroundRGB(str string, r uint8, g uint8, b uint8) string {
+	return applyTransform(str, func(idx int, line string) string {
+		return fmt.Sprintf("%s%s%s", getBgRGBColor(r, g, b), line, RESET)
 	})
 }
 
