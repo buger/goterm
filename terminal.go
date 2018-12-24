@@ -44,19 +44,23 @@ const (
 
 var Output *bufio.Writer = bufio.NewWriter(os.Stdout)
 
-func getColor(code int) string {
+// Get ANSI escape code for given color code for foreground
+func GetColor(code int) string {
 	return fmt.Sprintf("\033[3%dm", code)
 }
 
-func getBgColor(code int) string {
+// Get ANSI escape code for given color code for background
+func GetBgColor(code int) string {
 	return fmt.Sprintf("\033[4%dm", code)
 }
 
-func getRGBColor(r uint8, g uint8, b uint8) string {
+// Get ANSI escape code for given RGB color for foreground
+func GetRGBColor(r uint8, g uint8, b uint8) string {
 	return fmt.Sprintf("\033[38;2;%d;%d;%dm", r, g, b)
 }
 
-func getBgRGBColor(r uint8, g uint8, b uint8) string {
+// Get ANSI escape code for given RGB color for background
+func GetBgRGBColor(r uint8, g uint8, b uint8) string {
 	return fmt.Sprintf("\033[48;2;%d;%d;%dm", r, g, b)
 }
 
@@ -173,13 +177,13 @@ func Bold(str string) string {
 //
 func Color(str string, color int) string {
 	return applyTransform(str, func(idx int, line string) string {
-		return fmt.Sprintf("%s%s%s", getColor(color), line, RESET)
+		return fmt.Sprintf("%s%s%s", GetColor(color), line, RESET)
 	})
 }
 
 func ColorRGB(str string, r uint8, g uint8, b uint8) string {
 	return applyTransform(str, func(idx int, line string) string {
-		return fmt.Sprintf("%s%s%s", getRGBColor(r, g, b), line, RESET)
+		return fmt.Sprintf("%s%s%s", GetRGBColor(r, g, b), line, RESET)
 	})
 }
 
@@ -198,13 +202,13 @@ func HighlightRegion(str string, from, to, color int) string {
 //
 func Background(str string, color int) string {
 	return applyTransform(str, func(idx int, line string) string {
-		return fmt.Sprintf("%s%s%s", getBgColor(color), line, RESET)
+		return fmt.Sprintf("%s%s%s", GetBgColor(color), line, RESET)
 	})
 }
 
 func BackgroundRGB(str string, r uint8, g uint8, b uint8) string {
 	return applyTransform(str, func(idx int, line string) string {
-		return fmt.Sprintf("%s%s%s", getBgRGBColor(r, g, b), line, RESET)
+		return fmt.Sprintf("%s%s%s", GetBgRGBColor(r, g, b), line, RESET)
 	})
 }
 
