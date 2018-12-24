@@ -183,7 +183,7 @@ func Color(str string, color int) string {
 
 func ColorRGB(str string, r uint8, g uint8, b uint8) string {
 	return applyTransform(str, func(idx int, line string) string {
-		return fmt.Sprintf("%s%s%s", GetRGBColor(r, g, b), line, RESET)
+		return fmt.Sprintf("%s%s%s", GetColorRGB(r, g, b), line, RESET)
 	})
 }
 
@@ -208,7 +208,7 @@ func Background(str string, color int) string {
 
 func BackgroundRGB(str string, r uint8, g uint8, b uint8) string {
 	return applyTransform(str, func(idx int, line string) string {
-		return fmt.Sprintf("%s%s%s", GetBgRGBColor(r, g, b), line, RESET)
+		return fmt.Sprintf("%s%s%s", GetBgColorRGB(r, g, b), line, RESET)
 	})
 }
 
