@@ -25,7 +25,7 @@ import (
 const RESET = "\033[0m"
 
 // Reset to default color
-const RESET_COLOR = "\033[32m"
+const RESET_COLOR = "\033[39;49m"
 
 // Return cursor to start of line and clean it
 const RESET_LINE = "\r\033[K"
