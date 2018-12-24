@@ -52,6 +52,14 @@ func getBgColor(code int) string {
 	return fmt.Sprintf("\033[4%dm", code)
 }
 
+func getRGBColor(r uint8, g uint8, b uint8) string {
+	return fmt.Sprintf("\033[38;2;%d;%d;%dm", r, g, b)
+}
+
+func getBgRGBColor(r uint8, g uint8, b uint8) string {
+	return fmt.Sprintf("\033[48;2;%d;%d;%dm", r, g, b)
+}
+
 // Set percent flag: num | PCT
 //
 // Check percent flag: num & PCT
