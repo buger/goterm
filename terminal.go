@@ -55,12 +55,12 @@ func GetBgColor(code int) string {
 }
 
 // Get ANSI escape code for given RGB color for foreground
-func GetRGBColor(r uint8, g uint8, b uint8) string {
+func GetColorRGB(r uint8, g uint8, b uint8) string {
 	return fmt.Sprintf("\033[38;2;%d;%d;%dm", r, g, b)
 }
 
 // Get ANSI escape code for given RGB color for background
-func GetBgRGBColor(r uint8, g uint8, b uint8) string {
+func GetBgColorRGB(r uint8, g uint8, b uint8) string {
 	return fmt.Sprintf("\033[48;2;%d;%d;%dm", r, g, b)
 }
 
