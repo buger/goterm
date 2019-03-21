@@ -61,7 +61,7 @@ func (b *Box) Write(p []byte) (int, error) {
 	return b.Buf.Write(p)
 }
 
-// Render Box
+// String renders Box
 func (b *Box) String() (out string) {
 	borders := strings.Split(b.Border, " ")
 	lines := strings.Split(b.Buf.String(), "\n")
