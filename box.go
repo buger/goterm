@@ -3,6 +3,7 @@ package goterm
 import (
 	"bytes"
 	"strings"
+	"unicode/utf8"
 )
 
 const DEFAULT_BORDER = "- │ ┌ ┐ └ ┘"
@@ -74,7 +75,6 @@ func (b *Box) String() (out string) {
 
 	// Content width without borders and padding
 	contentWidth := b.Width - (b.PaddingX+1)*2
-
 	for y := 0; y < b.Height; y++ {
 		var line string
 
@@ -99,12 +99,13 @@ func (b *Box) String() (out string) {
 				line = ""
 			}
 
-			if len(line) > contentWidth-1 {
+			r := []rune(line)
+			if len(r) > contentWidth-1 {
 				// If line is too large limit it
-				line = line[0:contentWidth]
+				line = string(r[0:contentWidth])
 			} else {
 				// If line is too small enlarge it by adding spaces
-				line = line + strings.Repeat(" ", contentWidth-len(line))
+				line += strings.Repeat(" ", contentWidth-utf8.RuneCountInString(line))
 			}
 
 			line = prefix + line + suffix
@@ -112,7 +113,7 @@ func (b *Box) String() (out string) {
 
 		// Don't add newline for last element
 		if y != b.Height-1 {
-			line = line + "\n"
+			line += "\n"
 		}
 
 		out += line

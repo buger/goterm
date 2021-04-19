@@ -34,7 +34,7 @@ func TestCreateDataTable(t *testing.T) {
 }
 
 func TestLineChartIndependent(t *testing.T) {
-	fmt.Println("Independent charts\n")
+	fmt.Print("Independent charts\n\n")
 
 	chart := NewLineChart(100, 20)
 	chart.Flags = DRAW_INDEPENDENT //| DRAW_RELATIVE
@@ -51,7 +51,7 @@ func TestLineChartIndependent(t *testing.T) {
 	dataReversed.AddColumn("Lat")
 	dataReversed.AddColumn("Count")
 
-	//data.AddColumn("x*x")
+	// data.AddColumn("x*x")
 
 	for i := 0; i < 60; i++ {
 		x := float64(i + 60)
@@ -62,13 +62,13 @@ func TestLineChartIndependent(t *testing.T) {
 		dataReversed.AddRow(x, y2, y1)
 	}
 
-	// The two charts should look the same, only with inversed axes and colors
+	// The two charts should look the same, only with inverse axes and colors
 	fmt.Println(chart.Draw(data))
 	fmt.Println(chartReversed.Draw(dataReversed))
 }
 
 func TestLineChartRelative(t *testing.T) {
-	fmt.Println("Relative chart\n")
+	fmt.Print("Relative chart\n\n")
 
 	chart := NewLineChart(100, 20)
 	chart.Flags = DRAW_RELATIVE
@@ -78,7 +78,7 @@ func TestLineChartRelative(t *testing.T) {
 	data.AddColumn("Sin(x)")
 	data.AddColumn("Cos(x+1)")
 
-	//data.AddColumn("x*x")
+	// data.AddColumn("x*x")
 
 	for i := 0.1; i < 10; i += 0.1 {
 		data.AddRow(i, math.Sin(i), math.Cos(i+1))
@@ -88,10 +88,10 @@ func TestLineChartRelative(t *testing.T) {
 }
 
 func TestLineChart(t *testing.T) {
-	fmt.Println("Simple chart\n")
+	fmt.Print("Simple chart\n\n")
 
 	chart := NewLineChart(100, 20)
-	//chart.Flags = /*DRAW_INDEPENDENT // | */// DRAW_RELATIVE
+	// chart.Flags = /*DRAW_INDEPENDENT // | */// DRAW_RELATIVE
 
 	data := new(DataTable)
 	data.AddColumn("x")

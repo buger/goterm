@@ -22,3 +22,21 @@ func TestBox(t *testing.T) {
 		t.Error(boxSample)
 	}
 }
+
+func TestBox_WithUnicode(t *testing.T) {
+	boxSample := `
+┌--------┐
+│ hell☺  │
+│ w©rld  │
+│ test✓✓ │
+└--------┘`
+
+	box := NewBox(10, 5, 0)
+	fmt.Fprint(box, "hell☺\nw©rld\ntest✓✓")
+
+	if box.String() != boxSample[1:] {
+		t.Error("\n" + box.String())
+		t.Error("!=")
+		t.Error(boxSample)
+	}
+}
