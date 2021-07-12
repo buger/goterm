@@ -14,12 +14,13 @@ func TestBox(t *testing.T) {
 └--------┘`
 
 	box := NewBox(10, 5, 0)
-	fmt.Fprint(box, "hello\nworld\ntest")
+	fmt.Fprint(box, "hello i'm very long string\nworld\ntest")
 
 	if box.String() != boxSample[1:] {
 		t.Error("\n" + box.String())
 		t.Error("!=")
 		t.Error(boxSample)
+		t.Error(len(box.String()), len(boxSample))
 	}
 }
 

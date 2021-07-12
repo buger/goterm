@@ -2,8 +2,9 @@ package goterm
 
 import (
 	"bytes"
+	"regexp"
 	"strings"
-	"unicode/utf8"
+	_ "unicode/utf8"
 )
 
 const DEFAULT_BORDER = "- │ ┌ ┐ └ ┘"
@@ -62,6 +63,8 @@ func (b *Box) Write(p []byte) (int, error) {
 	return b.Buf.Write(p)
 }
 
+var ANSI_RE = regexp.MustCompile(`\\0\d+\[\d+(?:;\d+)?m`)
+
 // String renders Box
 func (b *Box) String() (out string) {
 	borders := strings.Split(b.Border, " ")
@@ -100,12 +103,62 @@ func (b *Box) String() (out string) {
 			}
 
 			r := []rune(line)
-			if len(r) > contentWidth-1 {
+
+			lastAnsii := ""
+			withoutAnsii := []rune{}
+			withOffset := []rune{}
+			i := 0
+
+			for {
+				if i >= len(r) {
+					break
+				}
+
+				if r[i] == 27 {
+					lastAnsii = ""
+					withOffset = append(withOffset, r[i])
+					lastAnsii += string(r[i])
+					i++
+					for {
+
+						i++
+						if i > len(r) {
+							break
+						}
+
+						withOffset = append(withOffset, r[i])
+						lastAnsii += string(r[i])
+
+						if r[i] == 'm' {
+							i++
+							break
+						}
+					}
+				}
+
+				if i >= len(r) {
+					break
+				}
+
+				withoutAnsii = append(withoutAnsii, r[i])
+
+				if len(withoutAnsii) <= contentWidth {
+					withOffset = append(withOffset, r[i])
+				}
+
+				i++
+			}
+
+			if len(withoutAnsii) > contentWidth {
 				// If line is too large limit it
-				line = string(r[0:contentWidth])
+				line = string(withOffset)
 			} else {
 				// If line is too small enlarge it by adding spaces
-				line += strings.Repeat(" ", contentWidth-utf8.RuneCountInString(line))
+				line += strings.Repeat(" ", contentWidth-len(withoutAnsii))
+			}
+
+			if lastAnsii != "" {
+				line += RESET
 			}
 
 			line = prefix + line + suffix
