@@ -207,10 +207,10 @@ func Width() int {
 func Height() int {
 	ws, err := getWinsize()
 	if err != nil {
-		// returns math.MaxInt if we could not retrieve the height of console window,
+		// returns math.MinInt32 if we could not retrieve the height of console window,
 		// like VSCode debugging console
 		if errors.Is(err, unix.EOPNOTSUPP) {
-			return math.MaxInt
+			return math.MinInt32
 		}
 		return -1
 	}
