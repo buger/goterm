@@ -16,13 +16,9 @@ package goterm
 import (
 	"bufio"
 	"bytes"
-	"errors"
 	"fmt"
-	"math"
 	"os"
 	"strings"
-
-	"golang.org/x/sys/unix"
 )
 
 // Reset all custom styles
@@ -201,20 +197,6 @@ func Width() int {
 	}
 
 	return int(ws.Col)
-}
-
-// Height gets console height
-func Height() int {
-	ws, err := getWinsize()
-	if err != nil {
-		// returns math.MinInt32 if we could not retrieve the height of console window,
-		// like VSCode debugging console
-		if errors.Is(err, unix.EOPNOTSUPP) {
-			return math.MinInt32
-		}
-		return -1
-	}
-	return int(ws.Row)
 }
 
 // CurrentHeight gets current height. Line count in Screen buffer.
