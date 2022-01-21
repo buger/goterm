@@ -1,4 +1,4 @@
-module github.com/buger/goterm
+module github.com/ericfialkowski/goterm
 
 go 1.15
 

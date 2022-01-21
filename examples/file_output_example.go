@@ -3,7 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
-	tm "github.com/buger/goterm"
+	tm "github.com/ericfialkowski/goterm"
 	"os"
 )
 
