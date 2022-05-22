@@ -25,7 +25,7 @@ import (
 const RESET = "\033[0m"
 
 // Reset to default color
-const RESET_COLOR = "\033[32m"
+const RESET_COLOR = "\033[39;49m"
 
 // Return cursor to start of line and clean it
 const RESET_LINE = "\r\033[K"
@@ -44,12 +44,24 @@ const (
 
 var Output *bufio.Writer = bufio.NewWriter(os.Stdout)
 
-func getColor(code int) string {
+// Get ANSI escape code for given color code for foreground
+func GetColor(code int) string {
 	return fmt.Sprintf("\033[3%dm", code)
 }
 
-func getBgColor(code int) string {
+// Get ANSI escape code for given color code for background
+func GetBgColor(code int) string {
 	return fmt.Sprintf("\033[4%dm", code)
+}
+
+// Get ANSI escape code for given RGB color for foreground
+func GetColorRGB(r uint8, g uint8, b uint8) string {
+	return fmt.Sprintf("\033[38;2;%d;%d;%dm", r, g, b)
+}
+
+// Get ANSI escape code for given RGB color for background
+func GetBgColorRGB(r uint8, g uint8, b uint8) string {
+	return fmt.Sprintf("\033[48;2;%d;%d;%dm", r, g, b)
 }
 
 // Set percent flag: num | PCT
@@ -165,7 +177,13 @@ func Bold(str string) string {
 //
 func Color(str string, color int) string {
 	return applyTransform(str, func(idx int, line string) string {
-		return fmt.Sprintf("%s%s%s", getColor(color), line, RESET)
+		return fmt.Sprintf("%s%s%s", GetColor(color), line, RESET)
+	})
+}
+
+func ColorRGB(str string, r uint8, g uint8, b uint8) string {
+	return applyTransform(str, func(idx int, line string) string {
+		return fmt.Sprintf("%s%s%s", GetColorRGB(r, g, b), line, RESET)
 	})
 }
 
@@ -184,7 +202,13 @@ func HighlightRegion(str string, from, to, color int) string {
 //
 func Background(str string, color int) string {
 	return applyTransform(str, func(idx int, line string) string {
-		return fmt.Sprintf("%s%s%s", getBgColor(color), line, RESET)
+		return fmt.Sprintf("%s%s%s", GetBgColor(color), line, RESET)
+	})
+}
+
+func BackgroundRGB(str string, r uint8, g uint8, b uint8) string {
+	return applyTransform(str, func(idx int, line string) string {
+		return fmt.Sprintf("%s%s%s", GetBgColorRGB(r, g, b), line, RESET)
 	})
 }
 
